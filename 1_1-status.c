@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
   struct stat status, *buffer;
   int r;
 
+  buffer = malloc(sizeof stat);
   r = stat(argv[1], buffer);
   if (r < 0)
     erreur_grave("Stat");
