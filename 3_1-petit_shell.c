@@ -29,12 +29,14 @@ int main() {
 
         pid = fork();
 
-        if (pid < 0) {
+        if (pid < 0) { //Erreur
             fprintf(stderr, "Erreur during forking\n");
             exit(EXIT_SUCCESS);
         } else if (pid == 0) { //Child
-            int r = execl(s,"");
+            //int r = execl(s,"");
+            int r = execlp(s,"");
             fprintf(stderr, "Erreur dans le exec %d\n", r);
+            exit(EXIT_SUCCESS);
         } else { //Parent
             //fprintf(stderr, "Erreur dans le exec\n")
             wait(NULL);
