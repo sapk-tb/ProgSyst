@@ -13,6 +13,9 @@
 #include <pwd.h>
 #include <stdio.h>
 #include <stdlib.h>
+//#include <unistd.h>
+//#include <errno.h>
+
 
 /* Petite fonction qui se charge d'envoyer les messages d'erreur
    et qui ensuite "suicide" le processus. */
@@ -33,17 +36,12 @@ int main(int argc, char **argv) {
   if (r < 0)
     erreur_grave("Stat");
 
-  printf("Fichier %s:  mode: %X  Taille: %ld  Proprietaire: %d\n", argv[1], buffer->st_mode, buffer->st_size, buffer->st_uid);
-
-  struct passwd *user;
+  printf("Fichier %s:  mode: %X  Taille: %ld  Proprietaire: %u\n", argv[1], buffer->st_mode, buffer->st_size, buffer->st_uid);
+  //*
+  //struct passwd *user;
   //user = malloc(sizeof (struct passwd));
-  struct passwd *pwd;
-  pwd = malloc(sizeof (struct passwd));
-
-  if ((pwd = getpwuid(buffer->st_uid)) != NULL)
-      printf(" %-8.8s", pwd->pw_name);
-
-  //printf("Fichier %s:  mode: %X  Taille: %ld  Proprietaire: %s\n", argv[1], buffer->st_mode, buffer->st_size, user.pw_name);
-
+  //user = getpwuid(1000);
+  printf("Fichier %s:  mode: %X  Taille: %ld  Proprietaire: %s\n", argv[1], buffer->st_mode, buffer->st_size, getpwuid(1000)->pw_name);
+  
   exit(EXIT_SUCCESS);
 }
