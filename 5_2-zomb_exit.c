@@ -59,6 +59,7 @@ int main(int argc, char **argv) {
     printf("Usage:  %s nombre\n", argv[0]);
     exit(EXIT_FAILURE);
   }
+  //signal(x,fin_fils);
   pid = fork();
 
   if (pid != 0) {	/* Processus Pere */
