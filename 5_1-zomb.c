@@ -37,13 +37,13 @@ int main() {
     pid = fork();
 
     if (pid != 0) { /* Processus Pere */
-        signal(SIGINT, fin);
+        signal(SIGCHLD, fin);
         travail();
     } else { /* Processus Fils */
         sleep(3);
         printf("Ahrg!!! je suis le fils et je meurs\n");
         //raise(SIGINT);
-        killpg(getpgrp(), SIGINT);
+        //killpg(getpgrp(), SIGINT);
         exit(EXIT_SUCCESS);
     }
 }
