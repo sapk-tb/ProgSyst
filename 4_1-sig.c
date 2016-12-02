@@ -21,19 +21,9 @@ void message1(int n) {
 void message2(int n) {
     printf("message numéro 2\n");
 }
-void swMessageTo1(int n);
-void swMessageTo2(int n);
 
-void swMessageTo1(int n) {
-    signal(SIGINT, message1);
-    printf("Switching to numéro 1\n");
-    signal(SIGQUIT, swMessageTo2);
-}
-
-void swMessageTo2(int n) {
-    signal(SIGINT, message2);
-    printf("Switching to numéro 2\n");
-    signal(SIGQUIT, swMessageTo1);
+void swMessage(int n) {
+    sig_avant = signal(SIGINT, sig_avant);
 }
 
 void hdl_sys1(int n) {
@@ -65,8 +55,9 @@ int main() {
 
 
     signal(SIGILL, hdl_sys1);
-    signal(SIGQUIT, swMessageTo2);
+    signal(SIGQUIT, swMessage);
     //signal(SIGINT,message1);
+    sig_avant = message2;
     struct sigaction sa;
 
     sa.sa_handler = message1;

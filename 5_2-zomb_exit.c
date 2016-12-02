@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
     signal(SIGCHLD,fin_fils);
     travail();
   } else {		/* Processus Fils */
-    sleep(20);
+    sleep(2);
     //killpg(getpgrp(), SIGINT);
     exit(x);
   }

@@ -17,39 +17,61 @@
  * de la commande strace : strace read_on_delay [true].
  * 
  * Sous Solaris on utilisera truss au lieu de strace
-*/
+ */
 
 #include <sys/fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <signal.h>
 
+int getCurrentFlag() {
+    int flag = fcntl(0, F_GETFL, 0);
+    if (flag < 0) {
+        perror("Fcntl F_GETFL");
+        exit(EXIT_FAILURE);
+    }
+    return flag;
+}
+
+void unsetFlag(int n) {
+    int flag = getCurrentFlag();
+    /* unset maintenant le flag avec O_NONBLOCK */
+    flag = fcntl(0, F_SETFL, flag ^ O_NONBLOCK);
+    if (flag < 0) {
+        perror("Fcntl F_SETFL");
+        exit(EXIT_FAILURE);
+    }
+
+}
+
+void setFlag(int n) {
+    int flag = getCurrentFlag();
+    /* positionner maintenant le flag avec O_NONBLOCK */
+    flag = fcntl(0, F_SETFL, flag | O_NONBLOCK);
+    if (flag < 0) {
+        perror("Fcntl F_SETFL");
+        exit(EXIT_FAILURE);
+    }
+}
 
 int main(int argc, char **argv) {
-  int flag, r;
-  char buf[10];
+    int r;
+    char buf[10];
 
-  if ((argc > 1) && (strcmp(argv[1], "true") == 0)) {
-    flag = fcntl(0, F_GETFL, 0);
-    if (flag < 0) {
-      perror("Fcntl F_GETFL");
-      exit(EXIT_FAILURE);
-    }
-    /* positionner maintenant le flag avec O_NONBLOCK */
-    flag = fcntl(0, ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ? ?);
+    signal(SIGINT, unsetFlag);
+    signal(SIGQUIT, setFlag);
 
-    if (flag < 0) {
-      perror("Fcntl F_SETFL");
-      exit(EXIT_FAILURE);
+    if ((argc > 1) && (strcmp(argv[1], "true") == 0)) {
+        setFlag(0);
     }
-  }
 
-  for (;;) {
-    r = read(0, buf, 10);
-    if ((r > 0) && (strncmp(buf, "quit", 4) == 0)) {
-      exit(EXIT_SUCCESS);
+    for (;;) {
+        r = read(0, buf, 10);
+        if ((r > 0) && (strncmp(buf, "quit", 4) == 0)) {
+            exit(EXIT_SUCCESS);
+        }
     }
-  }
 
 }
