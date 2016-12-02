@@ -39,7 +39,7 @@ void travail() __attribute__((noreturn));
 int main() {
   printf("PID: %d\n", getpid());
   
-  signal(4,hdl_sys1)
+  signal(4,hdl_sys1);
   
   travail();
 }
